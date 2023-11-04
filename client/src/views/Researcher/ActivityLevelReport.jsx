@@ -27,7 +27,7 @@ const ActivityLevelReport = () => {
   const [tbUnitFilter, setTbUnitFilter] = useState([]);
   const [tbLessonFilter, setTbLessonFilter] = useState([]);
   const [tbPrevFilter, setTbPrevFilter] = useState(null);
-
+  const [isTransition, setIsTransition] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       let filter = '';
@@ -209,7 +209,10 @@ const ActivityLevelReport = () => {
       ),
     },
   ];
-
+  const handleFilterClick = () => {
+    setIsTransition(!isTransition);
+    setShowFilter(!showFilter);
+  };
   return (
     <div className='container nav-padding'>
       <NavBar />
@@ -223,24 +226,23 @@ const ActivityLevelReport = () => {
           Return to Dashboard
         </button>
       </div>
-      <button id='show-filter-btn' onClick={() => setShowFilter(!showFilter)}>
+      <button id='show-filter-btn' onClick={() => {handleFilterClick()} }>
         {showFilter ? (
           <p> Click to Hide Filter</p>
         ) : (
-          <p> Click to Show Filter</p>
+          <span> Click to Show Filter</span>
         )}
       </button>
-      {showFilter ? (
-        <div className='filter-show'>
+      
+        <div className={`filter-show ${isTransition ? 'big' : ''}`}>
           <div className='filter-items'>
             <Filter setSearchParam={setSearchParam} paramObj={paramObj} />
           </div>
         </div>
-      ) : (
         <div className='filter-hide'>
           <Filter setSearchParam={setSearchParam} paramObj={paramObj} />
         </div>
-      )}
+  
       <main id='activity-report-content-wrapper'>
         <Table
           columns={columns}
