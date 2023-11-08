@@ -28,6 +28,21 @@ const timelineReducer = (timeline, action) => {
   };
 
   switch (action.type) {
+    case 'JumpToStart':
+      return {
+        ...timeline,
+        step: 0,
+        startIndex: 0,
+        endIndex: TIME_LINE_SIZE,
+      };
+    case 'JumpToEnd':
+      const newStartIndex = Math.max(0, timeline.length - TIME_LINE_SIZE);
+      return {
+        ...timeline,
+        step: timeline.length - 1,
+        startIndex: newStartIndex,
+        endIndex: timeline.length,
+      };
     case 'IncrementStep':
       timeline.step += 1;
       checkTimelineStepInBound();
@@ -57,6 +72,18 @@ const timelineReducer = (timeline, action) => {
       }
       return { ...timeline };
 
+    case 'IncrementTimelineSingleStep':
+      return {
+        ...timeline,
+        startIndex: Math.min(timeline.startIndex + 1, timeline.length - TIME_LINE_SIZE),
+        endIndex: Math.min(timeline.endIndex + 1, timeline.length),
+      };
+    case 'DecrementTimelineSingleStep':
+      return {
+        ...timeline,
+        startIndex: Math.max(timeline.startIndex - 1, 0),
+        endIndex: Math.max(timeline.endIndex - 1, TIME_LINE_SIZE),
+      };
     case 'FetchReplayLength':
       timeline.length = action.value;
       return { ...timeline };
@@ -200,6 +227,14 @@ const Replay = () => {
     },
   ];
 
+  const jumpToStart = () => {
+    dispatchTimelineReducer({ type: 'JumpToStart' });
+  };
+
+  const jumpToEnd = () => {
+    dispatchTimelineReducer({ type: 'JumpToEnd' });
+  };
+
   const goBack = () => {
     dispatchTimelineReducer({ type: 'DecrementStep' });
   };
@@ -298,10 +333,18 @@ const Replay = () => {
               </div>
               <button
                 className='replayButton'
+                onClick={jumpToStart}
+                disabled={timelineStates.step <= 0}
+                title='Jump to Start'
+                >
+                &#9198;
+              </button>
+              <button
+                className='replayButton'
                 onClick={goBack}
                 disabled={timelineStates.step <= 0}
               >
-                &#9198;
+                &#9194;
               </button>
               <button
                 className='replayButton'
@@ -319,6 +362,14 @@ const Replay = () => {
                 onClick={goForward}
                 disabled={timelineStates.step >= replay.length - 1}
               >
+                &#9193;
+              </button>
+              <button
+                className='replayButton'
+                onClick={jumpToEnd}
+                disabled={timelineStates.step >= replay.length - 1}
+                title='Jump to End'
+                >
                 &#9197;
               </button>
             </div>
@@ -343,7 +394,12 @@ const Replay = () => {
                     key={item.timestamp}
                     onClick={() => setStep(index)}
                   >
-                    {formatMyDate(item.timestamp)}
+                    <div className='timeline-item-timestamp'>
+                      {formatMyDate(item.timestamp)}
+                    </div>
+                    <div className='timeline-item-action'>
+                      {item.action}
+                    </div>
                   </div>
                 ))
                 .slice(timelineStates.startIndex, timelineStates.endIndex)}
