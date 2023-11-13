@@ -20,6 +20,18 @@ export default function GroupReport(props) {
     setStudyList(newStudyList);
   }
 
+  const box={
+    width: '150px',
+    height: '70px',
+    backgroundColor: 'white',
+    padding: '10px',
+    border: '2px solid black',
+    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.377',
+    borderRadius: '4px',
+    marginTop: '20px'
+   
+}
+
   return (
     <div className='container nav-padding'>
       <NavBar />
@@ -28,11 +40,11 @@ export default function GroupReport(props) {
         <div id='daily-report-header'>Studies</div>
         {/* Button to add a study */}
         <Popup trigger=
-                {<button> Click to add study </button>} 
+                {<button style={box}> Click to add study </button>} 
                 modal nested>
                 {
                     close => (
-                        <div className='modal'>
+                        <div className='model'>
                             <AddStudy 
                               newList = {studyList}
                               setNewList = {setStudyList}

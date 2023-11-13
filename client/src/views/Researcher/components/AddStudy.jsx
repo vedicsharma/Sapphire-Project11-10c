@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 function AddStudy({newList, setNewList, updateStudyList}) {
-    const [studyID, setStudyID] = useState(0);
+    const [studyID, setStudyID] = useState('');
     const [studyName, setStudyName] = useState('');
     
     function addStudyFunc(){
@@ -17,12 +17,25 @@ function AddStudy({newList, setNewList, updateStudyList}) {
         setStudyID('');
         setStudyName('');
     }
+
+    const box={
+        width: '400px',
+        height: '200px',
+        backgroundColor: 'white',
+        padding: '20px',
+        border: '2px solid black',
+        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.377',
+        borderRadius: '10px'
+       
+    }
     
     return (
-        <div>
+        
+        
+        <div style={box}>
           <h2>Add a Study</h2>
           <div>
-            <label>Study ID:</label>
+            <label style={{ padding: '10px' }}>Study ID:</label>
             <input
               type="text"
               value={studyID}
@@ -30,7 +43,7 @@ function AddStudy({newList, setNewList, updateStudyList}) {
             />
           </div>
           <div>
-            <label>Study Name:</label>
+            <label style={{ padding: '10px', paddingBottom: '20px'}}>Study Name:</label>
             <input
               type="text"
               value={studyName}
